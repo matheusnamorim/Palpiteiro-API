@@ -7,7 +7,8 @@ async function listGuesses(): Promise<QueryResult<Games>>{
     SELECT
     games.id,
     games."teamOne",
-    games."teamTwo" 
+    games."teamTwo",
+    games.type
     FROM games 
     WHERE status=true
     ORDER BY "createdAt" DESC;`);

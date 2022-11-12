@@ -4,4 +4,14 @@ export type Games = {
     teamTwo: string,
     status: boolean,
     createdAt?: Date | string
-}
+};
+
+export type Guesses = {
+    id?: number,
+    name: string,
+    scoreboardTeamOne?: number,
+    scoreboardTeamTwo?: number,
+    winnerTeam: string,
+    gamesId: number,
+    createdAt?: Date | string
+};
