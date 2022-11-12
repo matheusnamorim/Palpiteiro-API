@@ -17,7 +17,8 @@ async function validateGuesses(req: Request, res: Response, next: NextFunction){
         if(dataGuesses[0].teamOne !== newGuesses.winnerTeam && dataGuesses[0].teamTwo !== newGuesses.winnerTeam){
             return res.status(404).send("This team not exist in the guesses!");
         }   
-        if(newGuesses.scoreboardTeamOne && newGuesses.scoreboardTeamTwo) next();
+
+        if(newGuesses.scoreboardTeamOne >= 0 && newGuesses.scoreboardTeamTwo >= 0) next();
         else return res.status(422).send('Report the score of the two teams!');
     } catch (error) {
         return res.status(500).send(error.message);

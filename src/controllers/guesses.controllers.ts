@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import { Games } from '../protocols/Guesses.js';
+import { Games, Guesses } from '../protocols/Guesses.js';
 import * as guessesRepositories from '../repositories/guessesRepositories.js';
 
 async function listGuesses(req: Request, res: Response){
@@ -12,7 +12,9 @@ async function listGuesses(req: Request, res: Response){
 };
 
 function addGuesses(req: Request, res: Response){
+    const newGuesses = req.body as Guesses;
     try {
+        guessesRepositories.addGuesses(newGuesses);
         return res.sendStatus(200);
     } catch (error) {
         return res.status(500).send(error.message);

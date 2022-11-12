@@ -1,6 +1,6 @@
 import { connection } from "../database/db.js";
 import { QueryResult } from 'pg';
-import { Games } from "../protocols/Guesses.js";
+import { Games, Guesses } from "../protocols/Guesses.js";
 
 async function listGuesses(): Promise<QueryResult<Games>>{
     return connection.query(`
@@ -14,13 +14,21 @@ async function listGuesses(): Promise<QueryResult<Games>>{
     ORDER BY "createdAt" DESC;`);
 }
 
-async function dataGames(id): Promise<QueryResult<Games>>{
+async function dataGames(id: number): Promise<QueryResult<Games>>{
     return connection.query(`
         SELECT * FROM games WHERE id = $1;
     `, [id]);
 }
 
+function addGuesses(guesses: Guesses){
+    connection.query(`
+        INSERT INTO guesses ("name", "scoreboardTeamOne", "scoreboardTeamTwo", "winnerTeam", "gamesId") 
+        VALUES ($1, $2, $3, $4, $5);
+    `, [guesses.name, guesses.scoreboardTeamOne, guesses.scoreboardTeamTwo, guesses.winnerTeam, guesses.gamesId]);
+};
+
 export {
     listGuesses, 
-    dataGames
+    dataGames,
+    addGuesses
 };
