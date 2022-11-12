@@ -1,4 +1,4 @@
-import { connection } from "../../database/db.js";
+import { connection } from "../database/db.js";
 import { QueryResult } from 'pg';
 import { Games } from "../protocols/Guesses.js";
 
