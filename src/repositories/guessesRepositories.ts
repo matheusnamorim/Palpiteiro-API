@@ -14,4 +14,13 @@ async function listGuesses(): Promise<QueryResult<Games>>{
     ORDER BY "createdAt" DESC;`);
 }
 
-export {listGuesses}
+async function dataGames(id): Promise<QueryResult<Games>>{
+    return connection.query(`
+        SELECT * FROM games WHERE id = $1;
+    `, [id]);
+}
+
+export {
+    listGuesses, 
+    dataGames
+};
