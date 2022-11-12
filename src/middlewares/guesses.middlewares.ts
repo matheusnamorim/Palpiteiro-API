@@ -13,6 +13,7 @@ async function validateGuesses(req: Request, res: Response, next: NextFunction){
             });
         }
         const dataGuesses: Games[] = (await guessesRepositories.dataGames(newGuesses.gamesId)).rows;
+        if(dataGuesses[0].status === false) return res.status(409).send('This guess has been closed!');
         if(dataGuesses.length === 0) return res.status(404).send("This game not exist!");
         if(dataGuesses[0].teamOne !== newGuesses.winnerTeam && dataGuesses[0].teamTwo !== newGuesses.winnerTeam){
             return res.status(404).send("This team not exist in the guesses!");
@@ -28,7 +29,7 @@ async function validateGuesses(req: Request, res: Response, next: NextFunction){
 async function validateGuessesById(req: Request, res: Response, next: NextFunction){
     try {
         const id: string = req.params.id;
-        console.log(id)
+
         const dataGuesses: Guesses[] = (await guessesRepositories.guessesById(id)).rows;
         if(dataGuesses.length === 0) return res.status(404).send('There is id not exists!');
 
