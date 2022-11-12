@@ -15,10 +15,20 @@ function addGuesses(req: Request, res: Response){
     const newGuesses = req.body as Guesses;
     try {
         guessesRepositories.addGuesses(newGuesses);
-        return res.sendStatus(200);
+        return res.sendStatus(201);
     } catch (error) {
         return res.status(500).send(error.message);
     }
 };
 
-export { listGuesses, addGuesses };
+function removeGuesses(req: Request, res: Response){
+    const id: number = res.locals.id;
+    try {
+        guessesRepositories.deleteGuesses(id);
+        return res.sendStatus(204);
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+}
+
+export { listGuesses, addGuesses, removeGuesses };

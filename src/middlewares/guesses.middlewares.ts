@@ -25,6 +25,21 @@ async function validateGuesses(req: Request, res: Response, next: NextFunction){
     }
 };
 
+async function validateGuessesById(req: Request, res: Response, next: NextFunction){
+    try {
+        const id: string = req.params.id;
+        console.log(id)
+        const dataGuesses: Guesses[] = (await guessesRepositories.guessesById(id)).rows;
+        if(dataGuesses.length === 0) return res.status(404).send('There is id not exists!');
+
+        res.locals.id = id;
+        next();
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+};
+
 export {
-    validateGuesses
+    validateGuesses,
+    validateGuessesById
 };

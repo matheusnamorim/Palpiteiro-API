@@ -27,8 +27,22 @@ function addGuesses(guesses: Guesses){
     `, [guesses.name, guesses.scoreboardTeamOne, guesses.scoreboardTeamTwo, guesses.winnerTeam, guesses.gamesId]);
 };
 
+async function guessesById(id: string): Promise<QueryResult<Guesses>>{
+    return connection.query(`
+        SELECT * FROM guesses WHERE id = $1
+    `, [id]);
+};
+
+function deleteGuesses(id: number){
+    connection.query(`
+        DELETE FROM guesses WHERE id = $1;
+    `, [id]);
+};
+
 export {
     listGuesses, 
     dataGames,
-    addGuesses
+    addGuesses,
+    guessesById,
+    deleteGuesses
 };
