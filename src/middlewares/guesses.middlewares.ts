@@ -13,11 +13,20 @@ async function validateGuesses(req: Request, res: Response, next: NextFunction){
             });
         }
         const dataGuesses: Games[] = (await guessesRepositories.dataGames(newGuesses.gamesId)).rows;
+        
         if(dataGuesses[0].status === false) return res.status(409).send('This guess has been closed!');
         if(dataGuesses.length === 0) return res.status(404).send("This game not exist!");
-        if(dataGuesses[0].teamOne !== newGuesses.winnerTeam && dataGuesses[0].teamTwo !== newGuesses.winnerTeam){
+        if(dataGuesses[0].teamOne !== newGuesses.winnerTeam && dataGuesses[0].teamTwo !== newGuesses.winnerTeam && newGuesses.winnerTeam !== 'Empate'){
             return res.status(404).send("This team not exist in the guesses!");
-        }   
+        }
+
+        if(newGuesses.winnerTeam === dataGuesses[0].teamOne){
+            if(newGuesses.scoreboardTeamOne <= newGuesses.scoreboardTeamTwo) return res.status(422).send('Score does not match the winner!');
+        }else if(newGuesses.winnerTeam === dataGuesses[0].teamTwo){
+            if(newGuesses.scoreboardTeamTwo <= newGuesses.scoreboardTeamOne) return res.status(422).send('Score does not match the winner!');
+        }else if(newGuesses.winnerTeam === 'Empate'){
+            if(newGuesses.scoreboardTeamOne !== newGuesses.scoreboardTeamTwo) return res.status(422).send('Score does not match the winner!');
+        }
 
         if(newGuesses.scoreboardTeamOne >= 0 && newGuesses.scoreboardTeamTwo >= 0) next();
         else return res.status(422).send('Report the score of the two teams!');
