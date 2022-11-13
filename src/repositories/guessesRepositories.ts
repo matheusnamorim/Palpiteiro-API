@@ -78,11 +78,17 @@ async function gamesById(id: string): Promise<QueryResult<Games>>{
     `, [id]);
 };
 
-function updateGames(id: number){
+function updateGames(id: number, winner: string){
     connection.query(`
-        UPDATE games SET "status" = $1 WHERE id = $2;    
-    `, [false, id]);
+        UPDATE games SET "status" = $1, "winner" = $2 WHERE id = $3;    
+    `, [false, winner, id]);
 }
+
+async function getByName(name: string){
+    return connection.query(`
+        SELECT * FROM guesses WHERE name = $1;
+    `, [name]);
+};
 
 export {
     listGames, 
@@ -92,5 +98,6 @@ export {
     deleteGuesses,
     updateGames,
     gamesById,
-    listGuesses
+    listGuesses,
+    getByName
 };

@@ -40,21 +40,34 @@ function removeGuesses(req: Request, res: Response){
     }
 }
 
-function updateGames(req: Request, res: Response){
-    const id: number = res.locals.id;
+function updateGames(req: Request, res: Response){  
+    const id: number = res.locals.body.id;
+    const winner: string = res.locals.body.winner;
 
     try {
-        guessesRepositories.updateGames(id);
+        guessesRepositories.updateGames(id, winner);
         return res.sendStatus(200);
     } catch (error) {
         return res.status(500).send(error.message);
     }
-}
+};
+
+async function listGuessByName(req: Request, res: Response){
+    const name: string = req.params.name;
+    try {
+        const dataGuesses: Guesses[] = (await guessesRepositories.getByName(name)).rows;
+        if(dataGuesses.length !== 0) return res.status(200).send(dataGuesses);
+        else return res.status(404).send('This name does not exist!');
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+};
 
 export { 
     listGames, 
     addGuesses, 
     removeGuesses, 
     updateGames,
-    listGuesses
+    listGuesses,
+    listGuessByName
 };
