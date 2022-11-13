@@ -3,6 +3,7 @@ export type Games = {
     teamOne: string,
     teamTwo: string,
     status: boolean,
+    type: string,
     createdAt?: Date | string
 };
 
