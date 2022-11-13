@@ -40,7 +40,24 @@ async function validateGuessesById(req: Request, res: Response, next: NextFuncti
     }
 };
 
+async function validadeGames(req: Request, res: Response, next: NextFunction){
+    try {
+        const id: string = req.params.id;
+
+        const dataGames: Games[] = (await guessesRepositories.gamesById(id)).rows;
+        if(dataGames.length === 0) return res.status(404).send('There is id not exists!');
+        if(dataGames[0].status === false) return res.status(409).send('This guesses is already closed!');
+
+        res.locals.id = id;
+        next();
+    } catch (error) {
+        return res.status(500).send(error.message); 
+    }
+};
+
+
 export {
     validateGuesses,
-    validateGuessesById
+    validateGuessesById,
+    validadeGames
 };

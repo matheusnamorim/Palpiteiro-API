@@ -31,4 +31,20 @@ function removeGuesses(req: Request, res: Response){
     }
 }
 
-export { listGuesses, addGuesses, removeGuesses };
+function updateGames(req: Request, res: Response){
+    const id: number = res.locals.id;
+
+    try {
+        guessesRepositories.updateGames(id);
+        return res.sendStatus(200);
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+}
+
+export { 
+    listGuesses, 
+    addGuesses, 
+    removeGuesses, 
+    updateGames
+};

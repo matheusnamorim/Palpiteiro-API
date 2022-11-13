@@ -39,10 +39,25 @@ function deleteGuesses(id: number){
     `, [id]);
 };
 
+async function gamesById(id: string): Promise<QueryResult<Games>>{
+    return connection.query(`
+        SELECT * FROM games WHERE id = $1;
+    `, [id]);
+};
+
+function updateGames(id: number){
+    connection.query(`
+        UPDATE games SET "status" = $1 WHERE id = $2;    
+    `, [false, id]);
+}
+
+
 export {
     listGuesses, 
     dataGames,
     addGuesses,
     guessesById,
-    deleteGuesses
+    deleteGuesses,
+    updateGames,
+    gamesById
 };
