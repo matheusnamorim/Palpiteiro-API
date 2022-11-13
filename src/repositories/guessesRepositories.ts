@@ -1,6 +1,6 @@
 import { connection } from "../database/db.js";
 import { QueryResult } from 'pg';
-import { Games, Guesses } from "../protocols/Guesses.js";
+import { Games, Guesses, Ranking } from "../protocols/Guesses.js";
 
 async function listGames(): Promise<QueryResult<Games>>{
     return connection.query(`
@@ -84,11 +84,29 @@ function updateGames(id: number, winner: string){
     `, [false, winner, id]);
 }
 
-async function getByName(name: string){
+function updatesGuesses(id: number, winner: string){
+    connection.query(`
+        UPDATE guesses SET "guessesRight" = true WHERE "gamesId" = $1 AND "winnerTeam" = $2;
+    `, [id, winner]);
+};
+
+async function getByName(name: string): Promise<QueryResult<Guesses>>{
     return connection.query(`
         SELECT * FROM guesses WHERE name = $1;
     `, [name]);
 };
+
+async function ranking(): Promise<QueryResult<Ranking>>{
+    return connection.query(`
+        SELECT 
+        guesses.name AS "Name", 
+        COUNT(*) FILTER (WHERE "guessesRight")
+        AS "NumbersOfHits" 
+        FROM guesses 
+        GROUP BY "name"
+        ORDER BY "NumbersOfHits" DESC;
+    `);
+}
 
 export {
     listGames, 
@@ -99,5 +117,7 @@ export {
     updateGames,
     gamesById,
     listGuesses,
-    getByName
+    getByName,
+    updatesGuesses,
+    ranking
 };

@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import { Games, Guesses } from '../protocols/Guesses.js';
+import { Games, Guesses, Ranking } from '../protocols/Guesses.js';
 import * as guessesRepositories from '../repositories/guessesRepositories.js';
 
 async function listGames(req: Request, res: Response){
@@ -46,6 +46,7 @@ function updateGames(req: Request, res: Response){
 
     try {
         guessesRepositories.updateGames(id, winner);
+        guessesRepositories.updatesGuesses(id, winner);
         return res.sendStatus(200);
     } catch (error) {
         return res.status(500).send(error.message);
@@ -63,11 +64,21 @@ async function listGuessByName(req: Request, res: Response){
     }
 };
 
+async function rankingOfGuesses(req: Request, res: Response){
+    try {
+        const ranking: Ranking[] = (await guessesRepositories.ranking()).rows;
+        return res.status(200).send(ranking);
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+};
+
 export { 
     listGames, 
     addGuesses, 
     removeGuesses, 
     updateGames,
     listGuesses,
-    listGuessByName
+    listGuessByName,
+    rankingOfGuesses
 };

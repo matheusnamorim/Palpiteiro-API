@@ -16,3 +16,9 @@ export type Guesses = {
     gamesId: number,
     createdAt?: Date | string
 };
+
+export type Ranking = {
+    id?: number,
+    Name?: string,
+    NumbersOfHits?: number
+}
