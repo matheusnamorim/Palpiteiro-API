@@ -96,3 +96,15 @@ Retorno esperado: 204
 ##### Atualizar o status de um palpite para fechado e atualizar todos os ganhadores
 
 Retorno esperado: 200
+
+## Como rodar o projeto
+
+1. Clone o repositório
+2. instale as dependências
+```bash
+npm i
+```
+3. Criei um banco local postgres usando o arquivo `dump.sql`
+4. Iniciei a aplicação como administrador
+```bash
+npm run dev
